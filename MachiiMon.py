@@ -27,7 +27,20 @@ class MachiimonitorEventListener(sublime_plugin.EventListener):
 					locateMachii = 1	
 
 		if not locateMachii:
-			print(view.file_name())
-			print(machiiDict)
+			self.makeChanges(self.locateMachiiXml(view))
+	def locateMachiiXml(self , view):
+		file_name = view.file_name()
+		file_dir = ''
+		file_folders = file_name.split('/')
+		for i in range(1 , len(file_folders)):
+			
+			for folder in file_folders[0:-1*i]:
+				file_dir += folder+'/'
 
-
+			for entries in machiiDict:
+				if file_dir in entries[0]:
+					return os.path.join(entries[0] , entries[2][0])
+			file_dir = ''
+	def makeChanges(self , XmlFile):
+		print('RELOADING XMLFILE = ' + XmlFile)
+		f = open(XmlFile , 'a').write("\n")
